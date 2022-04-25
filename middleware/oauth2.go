@@ -25,6 +25,10 @@ func NewOAuth2(authHost string) *OAuth2 {
 // https://auth0.com/docs/quickstart/backend/golang/01-authorization
 func (m *OAuth2) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// TODO: validate organization id as audience in token
+		// pathParams := mux.Vars(r)
+		// orgID := pathParams["organization_id"]
+
 		issuerURL, err := url.Parse(m.authHost)
 		if err != nil {
 			milog.ErrorWithError(r.Context(), err, "failed to parse the issuer url")
@@ -72,6 +76,7 @@ func (m *OAuth2) Middleware(next http.Handler) http.Handler {
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
+
 		next.ServeHTTP(w, r)
 	})
 }
