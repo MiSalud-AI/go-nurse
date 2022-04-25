@@ -10,9 +10,10 @@ type contextKey string
 
 const (
 	// ContextKeyReqID is the context key for RequestID
-	ContextKeyRequestID     = contextKey("requestID")
-	ContextKeyXForwardedFor = contextKey("xForwardedFor")
-	ContextKeyClientIP      = contextKey("clientIP")
+	ContextKeyRequestID      = contextKey("requestID")
+	ContextKeyXForwardedFor  = contextKey("xForwardedFor")
+	ContextKeyClientIP       = contextKey("clientIP")
+	ContextKeyAuthorizedUser = contextKey("authorizedUser")
 
 	// HTTPHeaderNameRequestID has the name of the header for request ID
 	HTTPHeaderNameRequestID = "X-Request-ID"
