@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gorilla/mux"
 	"github.com/misalud-ai/go-nurse/milog"
 
 	"github.com/auth0/go-jwt-middleware/v2/jwks"
@@ -25,9 +26,8 @@ func NewOAuth2(authHost string) *OAuth2 {
 // https://auth0.com/docs/quickstart/backend/golang/01-authorization
 func (m *OAuth2) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// TODO: validate organization id as audience in token
-		// pathParams := mux.Vars(r)
-		// orgID := pathParams["organization_id"]
+		pathParams := mux.Vars(r)
+		orgID := pathParams["organization_id"]
 
 		issuerURL, err := url.Parse(m.authHost)
 		if err != nil {
@@ -40,7 +40,7 @@ func (m *OAuth2) Middleware(next http.Handler) http.Handler {
 			provider.KeyFunc,
 			validator.RS256,
 			issuerURL.String(),
-			[]string{},
+			[]string{orgID},
 			validator.WithAllowedClockSkew(time.Minute),
 		)
 		if err != nil {
