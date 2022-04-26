@@ -13,13 +13,19 @@ import (
 	"github.com/auth0/go-jwt-middleware/v2/validator"
 )
 
+const (
+	masterOrgID = "misalud-organization"
+)
+
 type OAuth2 struct {
-	authHost string
+	authHost    string
+	globalOrgID string
 }
 
-func NewOAuth2(authHost string) *OAuth2 {
+func NewOAuth2(authHost, globalOrgID string) *OAuth2 {
 	return &OAuth2{
 		authHost,
+		globalOrgID,
 	}
 }
 
@@ -40,7 +46,7 @@ func (m *OAuth2) Middleware(next http.Handler) http.Handler {
 			provider.KeyFunc,
 			validator.RS256,
 			issuerURL.String(),
-			[]string{orgID},
+			[]string{orgID, m.globalOrgID, masterOrgID},
 			validator.WithAllowedClockSkew(time.Minute),
 		)
 		if err != nil {
