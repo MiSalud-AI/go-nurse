@@ -1,6 +1,7 @@
 package miutil
 
 import (
+	"fmt"
 	"log"
 	"regexp"
 )
@@ -11,6 +12,10 @@ func OnlyNumbers(s string) string {
 		log.Fatal(err)
 	}
 	return reg.ReplaceAllString(s, "")
+}
+
+func NewError(cause, err error) error {
+	return fmt.Errorf("err: %w cause: %v", err, cause)
 }
 
 func NilString(s *string) string {
