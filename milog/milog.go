@@ -2,6 +2,7 @@ package milog
 
 import (
 	"context"
+	"runtime"
 
 	"github.com/sirupsen/logrus"
 )
@@ -19,6 +20,13 @@ const (
 	HTTPHeaderNameRequestID = "X-Request-ID"
 )
 
+func runFuncName() string {
+	pc := make([]uintptr, 1)
+	runtime.Callers(4, pc)
+	f := runtime.FuncForPC(pc[0])
+	return f.Name()
+}
+
 // https://blog.friendsofgo.tech/posts/context-en-golang/
 func getFieldsFromContext(ctx context.Context) *logrus.Entry {
 	xForwardedFor, _ := ctx.Value(ContextKeyXForwardedFor).(string)
@@ -26,13 +34,16 @@ func getFieldsFromContext(ctx context.Context) *logrus.Entry {
 	clientIP, _ := ctx.Value(ContextKeyClientIP).(string)
 	entry := logrus.NewEntry(logrus.New())
 	if xForwardedFor != "" {
-		entry = entry.Logger.WithField("x-forwarder-for", xForwardedFor)
+		entry = entry.WithField("x-forwarder-for", xForwardedFor)
 	}
 	if requestID != "" {
-		entry = entry.Logger.WithField("request-id", requestID)
+		entry = entry.WithField("request-id", requestID)
 	}
 	if clientIP != "" {
-		entry = entry.Logger.WithField("client-ip", xForwardedFor)
+		entry = entry.WithField("client-ip", xForwardedFor)
+	}
+	if funcName := runFuncName(); funcName != "" {
+		entry = entry.WithField("func-name", funcName)
 	}
 	return entry
 }
