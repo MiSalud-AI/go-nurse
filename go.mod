@@ -10,6 +10,8 @@ require (
 )
 
 require (
+	github.com/DataDog/datadog-go v4.8.3+incompatible // indirect
+	github.com/Microsoft/go-winio v0.5.2 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	golang.org/x/crypto v0.0.0-20220315160706-3147a52a75dd // indirect

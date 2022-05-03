@@ -4,27 +4,10 @@ import (
 	"net"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/misalud-ai/go-nurse/milog"
 	log "github.com/sirupsen/logrus"
 )
-
-type timer interface {
-	Now() time.Time
-	Since(time.Time) time.Duration
-}
-
-// realClock save request times
-type realClock struct{}
-
-func (rc *realClock) Now() time.Time {
-	return time.Now()
-}
-
-func (rc *realClock) Since(t time.Time) time.Duration {
-	return time.Since(t)
-}
 
 type Logging struct {
 	// logger *logrus.Logger
@@ -50,24 +33,6 @@ func realIP(req *http.Request) string {
 	return ra
 }
 
-type loggingResponseWriter struct {
-	http.ResponseWriter
-	statusCode int
-}
-
-func newLoggingResponseWriter(w http.ResponseWriter) *loggingResponseWriter {
-	return &loggingResponseWriter{w, http.StatusOK}
-}
-
-func (lw *loggingResponseWriter) WriteHeader(code int) {
-	lw.statusCode = code
-	lw.ResponseWriter.WriteHeader(code)
-}
-
-func (lw *loggingResponseWriter) Write(b []byte) (int, error) {
-	return lw.ResponseWriter.Write(b)
-}
-
 // Middleware implement mux middleware interface
 func (m *Logging) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -88,7 +53,7 @@ func (m *Logging) Middleware(next http.Handler) http.Handler {
 			"method":  r.Method,
 		})
 
-		lw := newLoggingResponseWriter(w)
+		lw := newResponseWriterWrapper(w)
 
 		next.ServeHTTP(lw, r)
 
