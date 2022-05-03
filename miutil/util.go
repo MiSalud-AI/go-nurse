@@ -1,4 +1,17 @@
-package util
+package miutil
+
+import (
+	"log"
+	"regexp"
+)
+
+func OnlyNumbers(s string) string {
+	reg, err := regexp.Compile("[^0-9]+")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return reg.ReplaceAllString(s, "")
+}
 
 func NilString(s *string) string {
 	if s != nil {
