@@ -62,7 +62,12 @@ func (m *OAuth2) Middleware(next http.Handler) http.Handler {
 		pathParams := mux.Vars(r)
 		orgID := pathParams["organization_id"]
 		jwtParser := jwt.Parser{}
-		token, _, _ := jwtParser.ParseUnverified(accessToken, jwt.MapClaims{})
+		token, _, err := jwtParser.ParseUnverified(accessToken, jwt.MapClaims{})
+		if err != nil {
+			milog.Warnf(r.Context(), "authorization header is invalid")
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
 		claims := token.Claims.(jwt.MapClaims)
 
 		// if tokens issued with the global misalud or then authorize
