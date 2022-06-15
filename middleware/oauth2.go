@@ -53,6 +53,15 @@ func (m *OAuth2) Middleware(next http.Handler) http.Handler {
 			accessToken = strings.Split(accessToken, " ")[1]
 		}
 
+		// backward compatibility
+		if accessToken == "" {
+			accessToken = r.Header.Get("token")
+		}
+		if accessToken == "" {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
 		if accessToken == "" {
 			milog.Warnf(r.Context(), "authorization header is empty")
 			w.WriteHeader(http.StatusUnauthorized)
