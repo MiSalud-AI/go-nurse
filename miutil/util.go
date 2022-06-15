@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"time"
 )
 
 func OnlyNumbers(s string) string {
@@ -61,4 +62,11 @@ func NilStringSlice(ss *[]string) []string {
 		return *ss
 	}
 	return []string{}
+}
+
+func NilDateTime(d *time.Time) time.Time {
+	if !d.IsZero() {
+		return *d
+	}
+	return time.Time{}
 }
