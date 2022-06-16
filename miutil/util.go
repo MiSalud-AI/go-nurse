@@ -3,6 +3,7 @@ package miutil
 import (
 	"log"
 	"regexp"
+	"time"
 )
 
 func OnlyNumbers(s string) string {
@@ -46,4 +47,11 @@ func ChunkSlice[T comparable](slice []T, chunkSize int) [][]T {
 	}
 
 	return chunks
+}
+
+func NilDateTime(d *time.Time) time.Time {
+	if d == nil {
+		return time.Time{}
+	}
+	return *d
 }

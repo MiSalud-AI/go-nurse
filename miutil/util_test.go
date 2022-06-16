@@ -3,6 +3,7 @@ package miutil
 import (
 	"reflect"
 	"testing"
+	"time"
 )
 
 func TestOnlyNumbers(t *testing.T) {
@@ -193,6 +194,41 @@ func TestChunkSlice(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := ChunkSlice(tt.args.slice, tt.args.chunkSize); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("ChunkSlice() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestNilDateTime(t *testing.T) {
+	dummyDate := time.Date(2022, 1, 1, 00, 00, 00, 00, time.UTC)
+	type args struct {
+		d *time.Time
+	}
+	tests := []struct {
+		name string
+		args args
+		want time.Time
+	}{
+		// TODO: Add test cases.
+		{
+			name: "nil Date",
+			args: args{
+				d: nil,
+			},
+			want: time.Time{},
+		},
+		{
+			name: "Date",
+			args: args{
+				d: &dummyDate,
+			},
+			want: dummyDate,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NilDateTime(tt.args.d); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NilDateTime() = %v, want %v", got, tt.want)
 			}
 		})
 	}
