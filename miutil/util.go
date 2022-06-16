@@ -1,7 +1,6 @@
 package miutil
 
 import (
-	"fmt"
 	"log"
 	"regexp"
 )
@@ -12,10 +11,6 @@ func OnlyNumbers(s string) string {
 		log.Fatal(err)
 	}
 	return reg.ReplaceAllString(s, "")
-}
-
-func NewError(cause, err error) error {
-	return fmt.Errorf("err: %w cause: %v", err, cause)
 }
 
 func AvoidNil[T comparable](t *T) T {
@@ -35,6 +30,9 @@ func NilSlice[T comparable](ss *[]T) []T {
 
 func ChunkSlice[T comparable](slice []T, chunkSize int) [][]T {
 	var chunks [][]T
+	if len(slice) == 0 {
+		return make([][]T, 0)
+	}
 	for i := 0; i < len(slice); i += chunkSize {
 		end := i + chunkSize
 
