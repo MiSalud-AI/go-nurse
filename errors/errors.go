@@ -1,8 +1,10 @@
 package errors
 
 import (
+	"context"
 	"net/http"
 
+	"github.com/misalud-ai/go-nurse/milog"
 	"github.com/unrolled/render"
 )
 
@@ -24,9 +26,13 @@ const (
 	ResponseCodeUnauthorized  = "unauthorized"
 )
 
-func Render(render *render.Render, w http.ResponseWriter, httpStatus int, code, message string) error {
-	return render.JSON(w, httpStatus, ErrorResponse{Error: Error{
+func Render(ctx context.Context,render *render.Render, w http.ResponseWriter, httpStatus int, code, message string)  {
+	err := render.JSON(w, httpStatus, ErrorResponse{Error: Error{
 		Code:    &code,
 		Message: &message,
 	}})
+
+	if err != nil {
+	   milog.Warnf(ctx, "rendering error %w", err)
+	}
 }
