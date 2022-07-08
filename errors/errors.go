@@ -17,22 +17,13 @@ type Error struct {
 	Message *string `json:"message,omitempty"`
 }
 
-const (
-	ResponseCodeBadRequest    = "bad-request"
-	ResponseCodeNotFound      = "not-found"
-	ResponseCodeConflict      = "conflict"
-	ResponseCodeInternalError = "internal-error"
-	ResponseCodeForbidden     = "forbidden"
-	ResponseCodeUnauthorized  = "unauthorized"
-)
-
-func Render(ctx context.Context,render *render.Render, w http.ResponseWriter, httpStatus int, code, message string)  {
+func Render(ctx context.Context, render *render.Render, w http.ResponseWriter, httpStatus int, code, message string) {
 	err := render.JSON(w, httpStatus, ErrorResponse{Error: Error{
 		Code:    &code,
 		Message: &message,
 	}})
 
 	if err != nil {
-	   milog.Warnf(ctx, "rendering error %w", err)
+		milog.Warnf(ctx, "rendering error %w", err)
 	}
 }
