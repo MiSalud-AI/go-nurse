@@ -9,10 +9,12 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
 	github.com/sirupsen/logrus v1.8.1
+	github.com/unrolled/render v1.4.1
 )
 
 require (
 	github.com/Microsoft/go-winio v0.5.2 // indirect
+	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/stretchr/objx v0.3.0 // indirect
 	golang.org/x/crypto v0.0.0-20220315160706-3147a52a75dd // indirect
