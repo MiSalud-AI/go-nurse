@@ -9,6 +9,8 @@ import (
 
 type contextKey string
 
+var LogrusLogger *logrus.Logger
+
 const (
 	// ContextKeyReqID is the context key for RequestID
 	ContextKeyRequestID      = contextKey("requestID")
@@ -32,7 +34,12 @@ func getFieldsFromContext(ctx context.Context) *logrus.Entry {
 	xForwardedFor, _ := ctx.Value(ContextKeyXForwardedFor).(string)
 	requestID, _ := ctx.Value(ContextKeyRequestID).(string)
 	clientIP, _ := ctx.Value(ContextKeyClientIP).(string)
-	entry := logrus.NewEntry(logrus.New())
+	var entry *logrus.Entry
+	if LogrusLogger == nil {
+		entry = logrus.NewEntry(logrus.New())
+	} else {
+		entry = logrus.NewEntry(LogrusLogger)
+	}
 	if xForwardedFor != "" {
 		entry = entry.WithField("x-forwarder-for", xForwardedFor)
 	}
