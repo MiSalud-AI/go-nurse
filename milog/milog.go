@@ -75,5 +75,5 @@ func ErrorWithError(ctx context.Context, err error, format string, args ...inter
 	getFieldsFromContext(ctx).WithError(err).Errorf(format, args...)
 }
 func WarnWithError(ctx context.Context, err error, format string, args ...interface{}) {
-	getFieldsFromContext(ctx).WithError(err).Errorf(format, args...)
+	getFieldsFromContext(ctx).WithError(err).Warnf(format, args...)
 }
